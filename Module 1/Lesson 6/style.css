@@ -1,0 +1,24 @@
+*{
+    font-size: 30px;
+    font-weight: 500;
+}
+
+h3{
+    color: blue;
+}
+
+h4{
+    color: palevioletred;
+}
+
+.myclass{
+    color: darkorange;
+}
+
+#myid{
+    color: mediumpurple;
+}
+
+h5,p{
+    color: maroon;
+}

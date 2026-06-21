@@ -1,0 +1,73 @@
+body{
+  margin:0;
+  font-family:"Baloo Tamma 2", sans-serif;
+  background:#fff;
+}
+
+.navigation{
+  background:#222;
+  border-top:2px solid #f2a900;
+  padding:12px 40px !important;
+}
+
+.brand-logo{
+  height:26px;
+  width:auto;
+}
+
+.navigation-link{
+  text-decoration:none;
+  font-size:14px;
+  font-weight:500;
+  color:#fff !important;
+}
+
+.navigation-link:hover{
+  color:#f2a900 !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #252525;
+  font-family: "Baloo Tamma 2", cursive;
+}
+
+.m-heading {
+  font-family: "Roboto Slab", serif;
+}
+
+.text-white {
+  color: white;
+}
+
+.main-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("https://github.com/harshacc301-dot/img/blob/main/1.png?raw=true");
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.main_row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("https: //github.com/RyanCreates74/Codingal-WebDev/blob/main/Module%202/Lesson%206/image.png");
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.main_row h1 {
+  font-size: 5rem;
+}
+
+.main_row img {
+  width: auto;
+  height: 100vh;
+}

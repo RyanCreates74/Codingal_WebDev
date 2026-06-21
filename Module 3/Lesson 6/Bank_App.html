@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link href="https://fonts.googleapis.com/css?family-Open+Sans:600,700" rel="stylesheet">
+        <title>A simple bank app</title>
+    </head>
+    <body>
+        
+        <h1>Banking calculator</h1>
+        <form>
+            <input type="number" id="principal" placeholder="Principal Amount">
+            <input type="number" id="rate" placeholder="Interest Rate (%)">
+            <input type="number" id="time" placeholder="Time (Years)">
+            <button onclick="calculateInterest()">Simple interest Calculate</button>
+            <button onclick="calculateInterestCompound()">Compound interest Calculate</button>
+            <p id="resultDisplay">Your interest will appear here.</p>
+        </form>
+    </body>
+    <script src="script.js"></script>
+</html>
