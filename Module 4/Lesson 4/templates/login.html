@@ -14,7 +14,7 @@
             </div>
             <h2 class="word">
                 <form action="/login" method="POST">
-                    <div class="msg"></div>
+                    <div class="msg">{{msg}}</div>
                     <input id="username" name="username" type="text" placeholder="Enter your username"
                         class="textbox"></br></br>
                     <input id="password" name="password" type="password" placeholder="Enter your Password"
@@ -22,7 +22,7 @@
                     <input type="submit" value="Sign In" class="btn"></br></br>
                 </form>
             </h2>
-            <p class="bottom">Don't have account? <a class="bottom" href="register.html"> Sign up here</a></p>
+            <p class="bottom">Don't have account? <a class="bottom" href="/register"> Sign up here</a></p>
         </div>
     </div>
 </body>
