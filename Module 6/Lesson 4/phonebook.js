@@ -116,5 +116,54 @@ function searchContact() {
 }
 
 function deleteContact() {
-    
+    rl.question("Enter Name or ID to Delete: ", (query) => {
+        const trimmedQuery = query.trim().toLowerCase();
+
+        if (trimmedQuery === "") {
+            console.log("Query cannot be empty.");
+            return showMenu();
+        }
+
+        // Find matches by ID or partial name
+        const matches = Object.entries(phonebook).filter(([id, contact]) =>
+            id.toLowerCase() === trimmedQuery ||
+            contact.name.toLowerCase().includes(trimmedQuery)
+        );
+
+        if (matches.length === 0) {
+            console.log(`No contacts found matching "${query}".`);
+        } else if (matches.length === 1) {
+            const [id, contact] = matches[0];
+            delete phonebook[id];
+            savePhonebook();
+            console.log(`Contact "${contact.name}" (ID: ${id}) has been deleted.`);
+        } else {
+            console.log(`\nMultiple matches found for "${query}". Please use the specific ID to delete:`);
+            matches.forEach(([id, contact]) => {
+                console.log(`- ID: ${id} | Name: ${contact.name}`);
+            });
+        }
+        showMenu();
+    });
 }
+
+function viewAll() {
+    const entries = Object.entries(phonebook);
+
+    if (entries.length === 0) {
+        console.log("The phonebook is completely empty.");
+    } else {
+        console.log("\n================ ALL CONTACTS ================");
+        entries.forEach(([id, contact], index) => {
+            console.log(`${index + 1}. ID: ${id}`);
+            console.log(`   Name   : ${contact.name}`);
+            console.log(`   Phone  : ${contact.phone}`);
+            console.log(`   Email  : ${contact.email}`);
+            console.log(`   Address: ${contact.address}`);
+            console.log("----------------------------------------------");
+        });
+    }
+    showMenu();
+}
+
+showMenu();
