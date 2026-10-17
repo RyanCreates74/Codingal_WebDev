@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Array Playground</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #38bdf8;
+        }
+
+        .array-display {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            min-height: 80px;
+            background: #020617;
+            border: 2px dashed #334155;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .array-item {
+            background: #0284c7;
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: popIn 0.2s ease-out;
+        }
+
+        .array-item span {
+            font-size: 0.7rem;
+            color: #bae6fd;
+            margin-top: 4px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        input {
+            flex: 1;
+            padding: 0.6rem;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+            outline: none;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        button {
+            padding: 0.6rem;
+            border: none;
+            border-radius: 6px;
+            background: #334155;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #475569;
+        }
+
+        button.primary {
+            background: #0284c7;
+        }
+
+        button.primary:hover {
+            background: #0369a1;
+        }
+
+        button.danger {
+            background: #e11d48;
+        }
+
+        button.danger:hover {
+            background: #be123c;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.6);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Array Operations Lab</h2>
+        <div class="array-display" id="arrayBox"></div>
+        
+        <div class="input-group">
+            <input type="text" id="inputValue" placeholder="Enter a value (e.g 'Apple')" />
+        </div>
+
+        <div class="btn-grid">
+            <button class="primary" onclick="pushItem()">Push (Add End)</button>
+            <button class="danger" onclick="popItem()">Pop (Remove End)</button>
+            <button class="primary" onclick="unshiftItem()">Unshift (Add Start)</button>
+            <button class="danger" onclick="shiftItem()">Shift (Remove Start)</button>
+            <button onclick="reverseArray()">Reverse</button>
+            <button onclick="clearArray()">Clear All</button>
+        </div>
+    </div>
+
+    <script>
+        let items = ['JavaScript', 'HTML', 'CSS']
+
+        const arrayBox = document.getElementById('arrayBox');
+        const inputVal = document.getElementById('inputValue');
+
+        function render() {
+            arrayBox.innerHTML = '';
+            if (items.length === 0) {
+                arrayBox.innerHTML = '<span style="color: #64748b;">[ Array is Empty ]</span>'
+                return;
+            }
+
+            items.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = 'array-item';
+                el.innerHTML = `${item} <span>idx: ${index}</span>`;
+                arrayBox.appendChild(el);
+            });
+        }
+
+        function pushItem() {
+            if (!inputVal.value) return;
+            items.push(inputVal.value);
+            inputVal.value = '';
+            render();
+        }
+
+        function popItem() {
+            items.pop();
+            render();
+        }
+
+        function unshiftItem() {
+            if (!inputVal.value) return;
+            items.unshift(inputVal.value);
+            inputVal.value = '';
+            render();
+        }
+
+        function shiftItem() {
+            items.shift();
+            render();
+        }
+
+        function reverseArray() {
+            items.reverse();
+            render();
+        }
+
+        function clearArray() {
+            items = [];
+            render();
+        }
+
+        render();
+    </script>
+
+</body>
+</html>
