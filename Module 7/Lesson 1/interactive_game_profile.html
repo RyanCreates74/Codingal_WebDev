@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Game Profile</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #eef2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #1a365d;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #3182ce;
+        }
+
+        button {
+            width: 100%;
+            background: #3182ce;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            background: #2b6cb0;
+        }
+
+        /* Profile Output Card */
+        .profile-card {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .greeting {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2b6cb0;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .profile-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 14px;
+        }
+
+        .profile-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #718096;
+            font-weight: 600;
+        }
+
+        .value {
+            font-weight: bold;
+            color: #1a202c;
+        }
+
+        .badge {
+            background: #edf2f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <h1>🎮 Player Profile Builder</h1>
+
+        <div class="form-group">
+            <label for="inputName">Player Name:</label>
+            <input type="text" id="inputName" placeholder="Enter Name">
+        </div>
+
+        <div class="form-group">
+            <label for="inputScore">Your Score (0 - 100):</label>
+            <input type="number" id="inputScore" placeholder="Enter score" min="0" max="100">
+        </div>
+
+        <button onclick="createProfile()">Generate Profile</button>
+
+        <div id="profileCard" class="profile-card">
+            <div id="greeting" class="greeting">---</div>
+
+            <div class="profile-row">
+                <span class="label">Name:</span>
+                <span id="name" class="value">---</span>
+            </div>
+
+            <div class="profile-row">
+                <span class="label">Score:</span>
+                <span id="score" class="value">---</span>
+            </div>
+
+            <div class="profile-row">
+                <span class="label">Top Score:</span>
+                <span id="topScore" class="value">100</span>
+            </div>
+
+            <div class="profile-row">
+                <span class="label">Is Top Score?:</span>
+                <span id="record" class="value">---</span>
+            </div>
+
+            <div class="profile-row">
+                <span class="label">Rank:</span>
+                <span id="rank" class="value badge">---</span>
+            </div>
+
+            <div class="profile-row">
+                <span class="label">Stars:</span>
+                <span id="stars" class="value">---</span>
+            </div>
+
+            <div class="profile-row">
+                <span class="label">Status:</span>
+                <span id="status" class="value">---</span>
+            </div>
+
+            <div class="profile-row">
+                <span class="label">Team:</span>
+                <span id="team" class="value">---</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createProfile() {
+            let name = document.getElementById("inputName").value.trim();
+            let myScore = Number(document.getElementById("inputScore").value);
+
+            if (!name) {
+                alert("Please enter a player name.");
+                return;
+            }
+
+            const highScore = 100;
+
+            let isTopScore = myScore === highScore ? "Yes 🎉" : "No";
+
+        let rank;
+        if (myScore >= 80) {
+            rank = "Gold 🥇";
+        } else if (myScore >= 50) {
+            rank = "Silver 🥈";
+        } else {
+            rank = "Bronze 🥉";
+        }
+
+        // 3. Status logic
+        let status;
+        if (myScore >= 80) {
+            status = "Excellent Player";
+        } else if (myScore >=50) {
+            status = "Good Player";
+        } else {
+            status = "Keep Practicing";
+        }
+
+        //4. Greeting based on current time
+        let hour = new Date().getHours();
+        let greeting;
+        if (hour < 12) {
+            greeting = `Good Morning, ${name}! 👋`;
+        } else if (hour < 17) {
+            greeting = `Good Afternoon, ${name}! 👋`;
+        } else {
+            greeting = `Good Evening, ${name}! 👋`;
+        }
+        
+        let stars = "";
+        let count = 0;
+        let totalStars = Math.min(5, Math.floor(myScore / 20));
+        while (count < (totalStars || 1)) {
+            stars += "⭐";
+            count++;
+        }
+
+        let team = rank.includes("Gold") ? "Elite Team 🚀" : "Rookie Team 🌱";
+
+        document.getElementById("greeting").textContent = greeting;
+        document.getElementById("name").textContent = name;
+        document.getElementById("score").textContent = `${myScore} / ${highScore}`;
+        document.getElementById("record").textContent = isTopScore;
+        document.getElementById("rank").textContent = rank;
+        document.getElementById("stars").textContent = stars;
+        document.getElementById("status").textContent = status;
+        document.getElementById("team").textContent = team;
+
+        document.getElementById("profileCard").style.display = "block";
+    
+    }
+
+    </script>
+
+</body>
+</html>
