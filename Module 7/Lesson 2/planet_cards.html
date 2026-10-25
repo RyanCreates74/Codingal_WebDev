@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Planet Cards</title>
+    <style>
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #f0f4ff;
+
+            padding: 30px;
+
+            text-align: center;
+
+        }
+
+        h1 {
+
+            color: #ff5a43;
+
+        }
+
+        p {
+
+            color: #555;
+
+        }
+
+        .controls {
+
+            margin: 20px 0;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 10px;
+
+        }
+
+        button {
+
+            background: #ff5a43;
+
+            color: white;
+
+            border: none;
+
+            padding: 12px 24px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            transition: background 0.2s;
+
+        }
+
+        button:hover {
+
+            background: #e04832;
+
+        }
+
+        .cards {
+
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 20px;
+
+            margin-top: 20px;
+
+        }
+
+        .card {
+
+            background: white;
+
+            border: 3px solid #ff5a43;
+
+            border-radius: 12px;
+
+            padding: 20px;
+
+            width: 200px;
+
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+            cursor: pointer;
+
+            transition: transform 0.2s;
+
+        }
+
+        .card:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+        .planet-icon {
+
+            font-size: 36px;
+
+            margin-bottom: 5px;
+
+        }
+
+        .planet-name {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            color: #333;
+
+        }
+
+        .planet-type {
+
+            font-size: 12px;
+
+            color: #ff5a43;
+
+            font-weight: bold;
+
+            text-transform: uppercase;
+
+            margin-top: 4px;
+
+        }
+
+        .planet-fact {
+
+            color: #666;
+
+            margin-top: 10px;
+
+            font-size: 14px;
+
+        }
+
+        .planet-details {
+
+            margin-top: 12px;
+
+            padding-top: 10px;
+
+            border-top: 1px dashed #ccc;
+
+            font-size: 13px;
+
+            color: #333;
+
+            display: none;
+
+        }
+
+        .card.expanded .planet-details {
+
+            display: block;
+
+        }
+    </style>
+</head>
+
+<body>
+    <h1>My Planet Cards</h1>
+    <p>Click any planet card to expand its distance details!</p>
+
+    <div class="controls">
+        <button onclick="system.sortByDistance()">Sort by Distance</button>
+        <button onclick="system.reset()">Reset Order</button>
+    </div>
+    <div class="cards" id="cardsContainer"></div>
+
+    <script>
+        class Planet {
+            constructor(id, name, type, fact, distance, icon) {
+                this.id = id;
+                this.name = name;
+                this.type = type;
+                this.fact = fact;
+                this.distance = distance;
+                this.icon = icon;
+                this.isExpanded = false;
+            }
+        
+
+            toggle() {
+                this.isExpanded = !this.isExpanded;
+            }
+
+            render() {
+                const expandedClass = this.isExpanded ? "expanded" : "";
+                return `
+                    <div class="card ${expandedClass}" onclick="system.togglePlanet('${this.id}')">
+                        <div class="planet-icon">${this.icon}</div>
+                        <div class="planet-name">${this.name}</div>
+                        <div class="planet-type">${this.type}</div>
+                        <div class="planet-fact">${this.fact}</div>
+                        <div class="planet-details">
+                            <strong>Distance:</strong> ${this.distance} Million km
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        class SolarSystem {
+            constructor(containerId) {
+                this.container = document.getElementById(containerId);
+                this.isAscending = true;
+
+                this.defaultPlanets = [
+                    new Planet("p1", "Jupiter", "Gas Giant", "Largest planet with a Great Red Spot", 778.5, "🟠"),
+                    new Planet("p2", "Mercury", "Rocky", "Smallest planet closest to the Sun", 57.9, "🪐"),
+                    new Planet("p3", "Saturn", "Gas Giant", "Has spectacular rings made of ice", 1434.0, "🪐"),
+                    new Planet("p4", "Earth", "Rocky", "The only planet known to host life", 149.6, "🌍"),
+                    new Planet("p5", "Mars", "Rocky", "Known as the Red Planet", 227.9, "🔴")
+                ];
+
+                this.planets = [...this.defaultPlanets];
+            }
+
+            display() {
+                this.container.innerHTML = this.planets
+                    .map(planet => planet.render())
+                    .join("");
+            }
+
+            sortByDistance() {
+                this.planets.sort((a, b) => {
+                    return this.isAscending ? a.distance - b.distance : b.distance - a.distance;
+                });
+
+                this.isAscending = !this.isAscending;
+                this.display();
+            }
+
+            togglePlanet(id) {
+                const targetPlanet = this.planets.find(p => p.id === id);
+                if (targetPlanet) {
+                    targetPlanet.toggle();
+                    this.display();
+                }
+            }
+
+            reset() {
+                this.planets = [...this.defaultPlanets];
+                this.isAscending = true;
+                this.display();
+            }
+        }
+
+        const system = new SolarSystem("cardsContainer");
+        system.display();
+    </script>
+</body>
+
+</html>
