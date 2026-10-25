@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Interactive Zoo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f8ff;
+            text-align: center;
+            padding: 30px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background: #1e1e2e;
+            color: #f5f5f5;
+        }
+
+        h1 {
+            color: #ff5a43;
+        }
+
+        #zoo {
+            border: 2px solid #ff5a43;
+            width: 340px;
+            margin: 16px auto;
+            padding: 16px;
+            border-radius: 10px;
+            background: white;
+            text-align: left;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode #zoo {
+            background: #2b2b3d;
+            border-color: #ff7661;
+        }
+
+        .zone {
+            border: 1px solid #ff5a43;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .animal-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 8px 0 0 0;
+        }
+
+        .animal-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff0ed;
+            margin: 4px 0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        body.dark-mode .animal-item {
+            background: #3a3a52;
+        }
+
+        .remove-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .controls {
+            margin: 20px auto;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input,
+        select,
+        button {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            background: #ff5a43;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #e04832;
+        }
+
+        .btn-secondary {
+            background: #4a90e2;
+        }
+
+        .btn-secondary:hover {
+            background: #357abd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>My Interactive Zoo</h1>
+    <p id="zoo-status">The zoo is currently closed.</p>
+
+    <div class="controls">
+        <button id="open-zoo-btn">Open the Zoo!</button>
+        <button id="toggle-theme-btn" class="btn-secondary">Toggle Dark/Light Mode</button>
+
+        <hr style="width:100%; border:0; border-top:1px solid #ccc; margin: 10px 0;">
+
+        <input type="text" id="animal-input" placeholder="Enter animal name (e.g Tiger)">
+        <select id="zone-select">
+            <option value="zone1">Zone 1: Mammals</option>
+            <option value="zone2">Zone 2: Birds</option>
+            <option value="zone3">Zone 3: Reptiles</option>
+        </select>
+        <button id="add-animal-btn">Add Animal to Zone.</button>
+    </div>
+
+    <div id="zoo">
+        <div class="zone">
+            <strong>Zone 1 (Mammals):</strong>
+            <ul id="zone1" class="animal-list"></ul>
+        </div>
+        <div class="zone">
+            <strong>Zone 2 (Birds):</strong>
+            <ul id="zone2" class="animal-list"></ul>
+        </div>
+        <div class="zone">
+            <strong>Zone 3 (Reptiles):</strong>
+            <ul id="zone3" class="animal-list"></ul>
+        </div>
+        <div class="zone">
+            <strong>Total Animals:</strong> <span id="total">0</span>
+        </div>
+    </div>
+
+    <script>
+
+        const openBtn = document.getElementById("open-zoo-btn");
+        const themeBtn = document.getElementById("toggle-theme-btn");
+        const addAnimalBtn = document.getElementById("add-animal-btn");
+        const animalInput = document.getElementById("animal-input");
+        const zoneSelect = document.getElementById("zone-select");
+        const totalSpan = document.getElementById("total");
+        const statusP = document.getElementById("zoo-status");
+        const zooDiv = document.getElementById("zoo");
+
+        function updateTotalCount() {
+            const allAnimals = document.querySelectorAll(".animal-item");
+            totalSpan.textContent = allAnimals.length;
+        }
+
+        function addAnimal(zoneId, name) {
+            if (!name.trim()) return;
+            const targetZone = document.getElementById(zoneId);
+            const li = document.createElement("li");
+            li.className = "animal-item";
+
+            const textNode = document.createTextNode(name);
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Remove";
+            deleteBtn.className = "remove-btn";
+
+            deleteBtn.addEventListener("click", function () {
+                li.remove();
+                updateTotalCount();
+            });
+
+            li.appendChild(textNode);
+            li.appendChild(deleteBtn);
+            targetZone.appendChild(li);
+
+            updateTotalCount();
+        }
+
+        openBtn.addEventListener("click", function () {
+            document.getElementById("zone1").innerHTML = "";
+            document.getElementById("zone1").innerHTML = "";
+            document.getElementById("zone1").innerHTML = "";
+
+            addAnimal("zone1", "Lion");
+            addAnimal("zone2", "Penguin");
+            addAnimal("zone3", "Iguana");
+
+            zooDiv.style.backgroundColor = "lightgreen";
+            statusP.textContent = document.title + " is now OPEN!";
+        });
+
+        addAnimalBtn.addEventListener("click", function () {
+            const animalName = animalInput.value;
+            const selectedZone = zoneSelect.value;
+
+            if (animalName === "") {
+                alert("Please enter an animal name!");
+                return;
+            }
+
+            addAnimal(selectedZone, animalName);
+            animalInput.value = "";
+        });
+
+        themeBtn.addEventListener("click", function () {
+            document.body.classList.toggle("dark-mode");
+        });
+
+    </script>
+
+</body>
+
+</html>
