@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Task Processor</title>
+    <style>
+        :root {
+            --bg-color: #fef2f2;
+            --card-bg: #ffffff;
+            --primary: #dc2626;
+            --primary-hover: #b91c1c;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border: #fca5a5;
+            --output-bg: #fff5f5;
+            --output-border: #fecaca;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.08);
+            border: 1px solid #fee2e2;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 6px;
+            text-align: center;
+            color: var(--primary);
+        }
+
+        p.subtitle {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #374151;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .output-box {
+            margin-top: 20px;
+            background: var(--output-bg);
+            border: 1px solid var(--output-border);
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            word-break: break-word;
+            color: #991b1b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>JS Lab Task Processor</h1>
+        <p class="subtitle">Test data types, search custom sentences, and replace words interactively.</p>
+        <div class="form-group">
+            <label for="taskSelect">Choose Task:</label>
+            <select id="taskSelect" onchange="handleTaskChange()">
+                <option value="typeof">Check Data Type (typeof)</option>
+                <option value="search">Search Word In Sentence</option>
+                <option value="typeof">Replace Word In Sentence</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="inputGroup1">
+            <label id="label1" for="field1">Enter value to check:</label>
+            <input id="field1" type="text" placeholder="e.g., 42, true, or hello">
+        </div>
+
+        <div class="form-group" id="inputGroup2" style="display: none;">
+            <label id="label2" for="field1">Word to Search</label>
+            <input id="field2" type="text" placeholder="e.g., dragon">
+        </div>
+
+        <div class="form-group" id="inputGroup3" style="display: none;">
+            <label for="field1">Replace with which word?</label>
+            <input id="field3" type="text" placeholder="e.g., wizard">
+        </div>
+
+        <button onclick="processTask()">Show Output</button>
+
+        <div id="outputResult" class="output-box">Your result will appear here.</div>
+    </div>
+
+    <script>
+        function handleTaskChange() {
+            let task = document.getElementById("taskSelect").value;
+            let label1 = document.getElementById("label1");
+            let field1 = document.getElementById("field1");
+            let group2 = document.getElementById("inputGroup2");
+            let group3 = document.getElementById("inputGroup3");
+
+            if (task === "typeof") {
+                label1.innerText = "Enter value to check:";
+                field1.placeholder = "e.g, 42, true, or hello";
+                group2.style.display = "none";
+                group3.style.display = "none";
+            } else if (task === "search") {
+                label1.innerText = "Enter your sentence";
+                field1.placeholder = "e.g., The quick brown fox jumps over the lazy dog";
+                document.getElementById("label2").innerText = "Word to search:";
+                document.getElementById("field2").placeholder = "e.g., fox";
+                group2.style.display = "block";
+                group3.style.display = "none";
+            } else if (task === "replace") {
+                label1.innerText = "Enter your sentence";
+                field1.placeholder = "e.g., The quick brown fox jumps over the lazy dog";
+                document.getElementById("label2").innerText = "Word to replace:";
+                document.getElementById("field2").placeholder = "e.g., fox";
+                group2.style.display = "block";
+                group3.style.display = "block";
+            }
+        }
+
+        function processTask() {
+            let outputDiv = document.getElementById("outputResult");
+            try {
+                let task = document.getElementById("taskSelect").value;
+                let val1 = document.getElementById("field1").value.trim();
+                let result = "";
+
+                if (val1 === "") {
+                    throw new Error("Primary input field cannot be empty.");
+                }
+
+                if (task === "typeof") {
+                    let val = val1;
+                    if (!isNan(val1)) val = Number(val1);
+                    else if (val1.toLowerCase() === "true") val = true;
+                    else if (val1.toLowerCase() === "false") val = false;
+
+                    result = `Input: <b>'${val1}'</b><br>Detected Data Type: <code>${typeof val}</code>`;
+                }
+                else if (task === "search") {
+                    let searchWord = document.getElementById("field2").value.trim();
+                    if (searchWord === "") {
+                        throw new Error("Please specify a word to search for.");
+                    }
+                    let pos = val1.toLowerCase().search(searchWord.toLowerCase());
+                    if (pos === -1) {
+                        result = `Sentence: <i>"${val1}"</i><br>Result: Word <b>'${searchWord}'</b> was not found.`;
+                    } else {
+                        result = `Sentence: <i>"${val1}"</i><br>Result: Found <b>'${searchWord}'</b> at character index <b>${pos}</b>.`;
+                    }
+                }
+                else if (task === "replace") {
+                    let targetWord = document.getElementById("field2").value.trim();
+                    let replaceWith = document.getElementById("field3").value.trim();
+
+                    if (targetWord === "") {
+                        throw new Error("Please specify which word you want to replace.");
+                    }
+                    if (replaceWith === "") {
+                        throw new Error("Please specify what word to replace it with");
+                    }
+
+                    let regex = new RegExp(targetWord, "gi");
+                    if (val1.search(regex) === -1) {
+                        result = `Could not find <b>'${targetWord}'</b> in your sentence to replace.`;
+                    } else {
+                        let newSentence = val1.replace(regex, replaceWith);
+                        result = `Original: <i>"${val1}"</i><br>Updated Sentence: <b>"${newSentence}"</b>`;
+                    }
+                }
+
+                outputDiv.innerHTML = result;
+            } catch (err) {
+                outputDiv.innerHTML = `<span style="color #991b1b;"><b>Error Caught:</b> ${err.message}</span>`;
+            }
+        }    
+    </script>
+</body>
+
+</html>
