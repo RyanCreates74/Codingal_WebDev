@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Tracker</title>
+    <style>
+    body {
+    font-family: Arial, sans-serif;
+    background: aliceblue;
+    text-align: center;
+    padding: 30px;
+    }
+    h1 {
+    color: #ff5a43;
+    }
+    button {
+    background: #ff5a43;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 5px;
+    }
+    button:hover {
+    background: #e94b36;
+    }
+    #delivery-container {
+    max-width: 700px;
+    margin: 25px auto;
+    }
+    .delivery-card {
+    background: white;
+    border: 2px solid #ff5a43;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 15px 0;
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+    .delivery-card h2 {
+    margin-top: 0;
+    color: #ff5a43;
+    }
+    .delivery-card p {
+    margin: 8px 0;
+    }
+    .status {
+    display: inline-block;
+    background: #fff0ed;
+    color: #ff5a43;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-weight: bold;
+    }
+    .result {
+    margin-top: 15px;
+    padding: 10px;
+    background: #e8ffe8;
+    color: green;
+    border-radius: 6px;
+    font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+    <h1>My Delivery Tracker</h1>
+    <button onclick="loadOrders()">Load Orders</button>
+    <button onclick="startDelivery()">Start Delivery</button>
+    <div id="delivery-container"></div>
+
+    <script>
+        let jsonData = `[
+            {
+                "id": 101,
+                "item": "Pizza",
+                "price": 12,
+                "shop": "Papa John's",
+                "customer": "Deepak",
+                "address": "London",
+                "status": "Order received"
+            },
+            {
+                "id": 102,
+                "item": "Burger",
+                "price": 8,
+                "shop": "Burger King",
+                "customer": "Ryan",
+                "address": "Paris",
+                "status": "Preparing"
+            },
+            {
+                "id": 103,
+                "item": "Fried Chicken",
+                "price": 15,
+                "shop": "KFC",
+                "customer": "Ananya",
+                "address": "New York",
+                "status": "Out for delivery"
+            }
+        ]`;
+
+    function loadOrders() {
+        let orders = JSON.parse(jsonData);
+        let container = document.getElementById("delivery-container");
+        container.innerHTML = "";
+        orders.forEach(function (order) {
+            let card = document.createElement("div");
+            card.className = "delivery-card";
+            card.innerHTML = `
+                    <h2>${order.item}</h2>
+                    <p><strong>Order ID:</strong> ${order.id}</p>
+                    <p><strong>Shop:</strong> ${order.shop}</p>
+                    <p><strong>Customer:</strong> ${order.customer}</p>
+                    <p><strong>Address:</strong> ${order.address}</p>
+                    <p><strong>Price:</strong> ${order.price}</p>
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="status">${order.status}</span>
+                    </p>
+                    <div class="result" id="result-${order.id}">
+                        Waiting for delivery...
+                    </div>
+                `;
+            container.appendChild(card)
+        });
+    }
+
+    function delay(ms) {
+        return new Promise(function (resolve) {
+            setTimeout(resolve, ms);
+        });
+    }
+
+    async function startDelivery() {
+        if (document.querySelector(".delivery-card") === null) {
+            loadOrders();
+        }
+
+        let orders = JSON.parse(jsonData);
+
+        orders.forEach(async function(order) {
+            let result = document.getElementById("result-" + order.id);
+            if (!result) return;
+            let status = result.parentElement.querySelector(".status");
+
+            status.innerHTML = "Order received!";
+            result.innerHTML = "Your order has been received."
+
+            await delay(2000);
+
+            status.innerHTML = "Kitchen is preparing...";
+            result.innerHTML = "Your food is being prepared.";
+
+            await delay(3000);
+
+            status.innerHTML = "Out for delivery!";
+            result.innerHTML = "Your order is on the way.";
+
+            await delay(2000);
+
+            status.innerHTML = "Delivered";
+            result.innerHTML = "Your order has arrived!";
+        });
+    }
+    </script>
+</body>
+</html>
